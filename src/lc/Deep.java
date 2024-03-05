@@ -1,9 +1,6 @@
 package lc;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Objects.hash;
 
@@ -219,13 +216,93 @@ class Solution46 {
  * https://leetcode.cn/problems/n-queens/
  */
 class Solution51 {
-
     List<List<String>> ans = new ArrayList<>();
+    List<String> ansPath = new ArrayList<>();
+    char[][] path = null;
+    int n;
     public List<List<String>> solveNQueens(int n) {
-        return null;
+        this.n = n;
+        path = new char[n][n];
+        for (char[] chars : path) {
+            Arrays.fill(chars, '.');
+        }
+        dfs(0);
+        return ans;
+    }
+    public void dfs(int i){
+        if(i == n){
+            for (int i1 = 0; i1 < path.length; i1++) {
+                ansPath.add(new String(path[i1]));
+            }
+            ans.add(new ArrayList<>(ansPath));
+            ansPath.clear();
+        }
+        for (int j = 0; j < n; j++) {
+            if(isValid(i,j)){
+                path[i][j] = 'Q';
+                dfs(i+1);
+                path[i][j] = '.';
+            }
+        }
+    }
+    public boolean isValid(int i,int j){
+        for (int k = i-1; k >= 0; k--) {
+            if (path[k][j] == 'Q') return false;
+        }
+        for (int k = i-1, p = j+1; k >= 0 && p < n; k--,p++) {
+            if (path[k][p] == 'Q') return false;
+        }
+        for (int k = i-1,p = j-1; k >= 0 && p >= 0 ; k--,p--) {
+            if (path[k][p] == 'Q') return false;
+        }
+        return true;
+
     }
 
 }
 
+/**
+ * n皇后2
+ * https://leetcode.cn/problems/n-queens-ii/description/
+ */
+class Solution52 {
+    char[][] path = null;
+    int n,ans;
+    public int totalNQueens(int n) {
+        this.n = n;
+        path = new char[n][n];
+        for (char[] chars : path) {
+            Arrays.fill(chars, '.');
+        }
+        dfs(0);
+        return ans;
+    }
+    public void dfs(int i){
+        if(i == n){
+            ans++;
+        }
+        for (int j = 0; j < n; j++) {
+            if(isValid(i,j)){
+                path[i][j] = 'Q';
+                dfs(i+1);
+                path[i][j] = '.';
+            }
+        }
+    }
+    public boolean isValid(int i,int j){
+        for (int k = i-1; k >= 0; k--) {
+            if (path[k][j] == 'Q') return false;
+        }
+        for (int k = i-1, p = j+1; k >= 0 && p < n; k--,p++) {
+            if (path[k][p] == 'Q') return false;
+        }
+        for (int k = i-1,p = j-1; k >= 0 && p >= 0 ; k--,p--) {
+            if (path[k][p] == 'Q') return false;
+        }
+        return true;
+
+    }
+
+}
 
 
