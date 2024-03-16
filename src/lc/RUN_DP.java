@@ -1,7 +1,10 @@
 package lc;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 /**
  * @author xwp
@@ -301,6 +304,21 @@ class Solution2915 {
         }
         return Math.max(dfs(nums, i - 1, c),dfs(nums, i - 1, c - nums.get(i))+1);
     }
+
+
+    public int lengthOfLongestSubsequence3(List<Integer> nums, int target) {
+        int len = nums.size();
+        int[] dp = new int[target+1];
+        Arrays.fill(dp,Integer.MIN_VALUE);
+        dp[0] = 0;
+        for (int i = 0; i < len; i++) {
+            for (int j = target; j >= 0 ; j--) {
+                if (j>= nums.get(i))
+                    dp[j] = Math.max(dp[j-nums.get(i)]+1,dp[j]);
+            }
+        }
+        return dp[target];
+    }
 }
 
 
@@ -337,5 +355,73 @@ class Solution1143 {
             return Math.max(dfs(c1,c2,i-1,j),dfs(c1,c2,i,j-1));
         }
         return dfs(c1,c2,i-1,j-1)+1;
+    }
+}
+
+/**
+ * https://leetcode.cn/problems/edit-distance/description/
+ */
+class Solution72 {
+    public int minDistance(String word1, String word2) {
+        // "horse",
+        // "ros"
+        var c1 = word1.toCharArray();
+        var c2 = word2.toCharArray();
+        var len1  = c1.length;
+        var len2 = c2.length;
+        int[][] dp = new int[len1+1][len2+1];
+        for (int i = 0; i < len1; i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i < len2; i++) {
+            dp[0][i] = i;
+        }
+        for (int i = 0; i < len1; i++) {
+            for (int j = 0; j < len2; j++) {
+                if(c1[i] == c2[j]){
+                    dp[i+1][j+1] = dp[i][j];
+                }else{
+                    dp[i+1][j+1] = Math.min(dp[i][j],Math.min(dp[i][j+1],dp[i+1][j]))+1;
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+}
+
+
+/**
+ * https://leetcode.cn/problems/longest-increasing-subsequence/
+ */
+class Solution300 {
+    public int lengthOfLIS(int[] nums) {
+        int len = nums.length,ans = 1;
+        int[] dp = new int[len+1];
+        Arrays.fill(dp,1);
+        for (int i = 0; i <len; i++) {
+            for (int j = 0; j < i; j++) {
+                if(nums[i] > nums[j]){
+                    dp[i] = Math.max(dp[i],dp[j]+1);
+                    ans = Math.max(ans,dp[i]);
+                }
+            }
+        }
+        return ans;
+    }
+
+    //贪心？
+    public int lengthOfLIS2(int[] nums) {
+        int len = nums.length,ans = 1;
+        return 0;
+    }
+}
+
+/**
+ * https://leetcode.cn/problems/find-peak-element/description/
+ */
+class Solution162 {
+    public int findPeakElement(int[] nums) {
+
+
     }
 }
