@@ -418,10 +418,45 @@ class Solution300 {
 
 /**
  * https://leetcode.cn/problems/find-peak-element/description/
+ * https://leetcode.cn/problems/peak-index-in-a-mountain-array/
  */
-class Solution162 {
+class Solution_162_852 {
     public int findPeakElement(int[] nums) {
+        int i = 0, j = nums.length-1;
+        while (i<=j){
+            int mid = (i+j)/2;
+            if(nums[mid] < nums[mid+1]){
+                i = mid+1;
+            }else{
+                j = mid-1;
+            }
+        }
+        return i;
+    }
+
+    int len;
+    public int peakIndexInMountainArray(int[] arr) {
+        int i = 0,len = arr.length;
+        int j = len-1;
+        while (i<=j){
+            int mid = (i+j)/2;
+            if(arr[mid] < arr[mid+1]){
+                i = mid+1;
+            }else{
+                j = mid-1;
+            }
+        }
+        return i;
+    }
+}
 
 
+/**
+ * 难
+ * https://leetcode.cn/problems/minimum-number-of-removals-to-make-mountain-array/
+ */
+class Solution1671 {
+    public int minimumMountainRemovals(int[] nums) {
+        int len = nums.length;
     }
 }
