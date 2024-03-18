@@ -3,6 +3,7 @@ package lc;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,9 @@ import java.util.stream.Collectors;
  */
 public class RUN_DP {
     public static void main(String[] args) {
-
+        Integer t = 2;
+        Integer i = Objects.requireNonNull(t);
+        System.out.println(i);
     }
 }
 
@@ -458,5 +461,7 @@ class Solution_162_852 {
 class Solution1671 {
     public int minimumMountainRemovals(int[] nums) {
         int len = nums.length;
+        return 0;
     }
 }
+
