@@ -1,9 +1,11 @@
 package lc;
 
+import pass_leecode.Solution;
+
 import java.awt.image.AreaAveragingScaleFilter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
@@ -14,9 +16,6 @@ import java.util.stream.Collectors;
  */
 public class RUN_DP {
     public static void main(String[] args) {
-        Integer t = 2;
-        Integer i = Objects.requireNonNull(t);
-        System.out.println(i);
     }
 }
 
@@ -459,9 +458,136 @@ class Solution_162_852 {
  * https://leetcode.cn/problems/minimum-number-of-removals-to-make-mountain-array/
  */
 class Solution1671 {
+
     public int minimumMountainRemovals(int[] nums) {
         int len = nums.length;
         return 0;
     }
 }
+
+class ListNode{
+    public int val;
+    public ListNode next;
+
+    public ListNode(int val){
+        this.val = val;
+    }
+}
+
+
+/**
+ * https://twitter.com/wu_haobin/status/1771138803459293195
+ */
+class SolutionSimple {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ListNode dum = new ListNode(-1),d = dum;
+        int[] t = new int[]{};
+        while (scanner.hasNext("x"))
+        for (int i : t) {
+            ListNode listNode = new ListNode(i);
+            d.next = listNode;
+            d = listNode;
+        }
+        ListNode mid = getMid(dum.next);
+        while (mid != null){
+            System.out.println(mid.val);
+            mid = mid.next;
+        }
+    }
+
+    public static ListNode getMid(ListNode node){
+        ListNode h = node;
+        if (h == null) return null;
+        if(h.next == null) return h;
+        ListNode monoHead = node.next;
+        while (h != null && h.next != null){
+            ListNode next = h.next;
+            h.next = h.next.next;
+            h = next;
+        }
+        ListNode r = reverseNode(monoHead);
+        ListNode l = node;
+        ListNode dummy = new ListNode(-1),now= dummy;
+        while(l != null && r != null){
+            int val = Math.min(l.val,r.val);
+            ListNode listNode = new ListNode(val);
+            now.next = listNode;
+            now = listNode;
+            if (val == l.val) l = l.next;
+            else{
+                r = r.next;
+            }
+        }
+        if(l != null){
+            now.next = l;
+        }
+        if(r != null){
+            now.next = r;
+        }
+        return dummy.next;
+    }
+
+    public  static ListNode reverseNode(ListNode node){
+        ListNode h = node,pre = null;
+        while  (h != null){
+            ListNode next = h.next;
+            h.next = pre;
+            pre = h;
+            h = next;
+        }
+        return pre ;
+    }
+}
+
+
+/**
+ * https://leetcode.cn/problems/best-team-with-no-conflicts/description/
+ */
+class Solution1626{
+    public static void main(String[] args) {
+        int[] scores = new int[]{5,5,5,5};
+        int[] ages = new int[]{1,1,2,2};
+        int i = bestTeamScore(scores, ages);
+        System.out.println(i);
+    }
+
+    public static int bestTeamScore(int[] scores, int[] ages) {
+        int len = ages.length;
+        int[][] players = new int[len][2];
+        for (int i = 0; i < len ; i++) {
+            players[i][0] = ages[i];
+            players[i][1] = scores[i];
+        }
+        Arrays.sort(players, (o1, o2)-> o1[0] != o2[0] ? o1[0]-o2[0] : o1[1]-o2[1]);
+        int ans = 0;
+        int[] dp = new int[len+1];
+        for (int i = 0; i < len; i++) {
+            dp[i] = players[i][1];
+        }
+        for (int i = 0; i < len; i++) {
+            int k = dp[i];
+            for (int j = 0; j < i; j++) {
+                if(players[i][1] >= players[j][1]){
+                    dp[i] = Math.max(dp[i],k+dp[j]);
+                }
+            }
+            ans = Math.max(ans,dp[i]);
+        }
+        return ans;
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/longest-increasing-subsequence-ii/
+ */
+class Solution2407 {
+    public int lengthOfLIS(int[] nums, int k) {
+        return 0;
+    }
+}
+
+
+
 
