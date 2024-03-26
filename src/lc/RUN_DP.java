@@ -295,28 +295,29 @@ class Solution2915 {
 
     public int lengthOfLongestSubsequence2(List<Integer> nums, int target) {
         int k = dfs(nums, nums.size() - 1, target);
-        return k < 0?-1:k;
+        return k < 0 ? -1 : k;
     }
+
     public int dfs(List<Integer> nums, int i, int c) {
         if (i < 0) {
-            return c == 0 ? 0 : Integer.MIN_VALUE/2;
+            return c == 0 ? 0 : Integer.MIN_VALUE / 2;
         }
         if (nums.get(i) >= c) {
             return dfs(nums, i - 1, c);
         }
-        return Math.max(dfs(nums, i - 1, c),dfs(nums, i - 1, c - nums.get(i))+1);
+        return Math.max(dfs(nums, i - 1, c), dfs(nums, i - 1, c - nums.get(i)) + 1);
     }
 
 
     public int lengthOfLongestSubsequence3(List<Integer> nums, int target) {
         int len = nums.size();
-        int[] dp = new int[target+1];
-        Arrays.fill(dp,Integer.MIN_VALUE);
+        int[] dp = new int[target + 1];
+        Arrays.fill(dp, Integer.MIN_VALUE);
         dp[0] = 0;
         for (int i = 0; i < len; i++) {
-            for (int j = target; j >= 0 ; j--) {
-                if (j>= nums.get(i))
-                    dp[j] = Math.max(dp[j-nums.get(i)]+1,dp[j]);
+            for (int j = target; j >= 0; j--) {
+                if (j >= nums.get(i))
+                    dp[j] = Math.max(dp[j - nums.get(i)] + 1, dp[j]);
             }
         }
         return dp[target];
@@ -331,13 +332,13 @@ class Solution1143 {
     public int longestCommonSubsequence(String text1, String text2) {
         char[] c1 = text1.toCharArray();
         char[] c2 = text2.toCharArray();
-        int[][] dp = new int[c1.length+1][c2.length+1];
+        int[][] dp = new int[c1.length + 1][c2.length + 1];
         for (int i = 0; i < c1.length; i++) {
             for (int j = 0; j < c2.length; j++) {
-                if(c1[i] == c2[j]){
-                    dp[i+1][j+1] = dp[i][j]+1;
-                }else{
-                    dp[i+1][j+1] = Math.max(dp[i][j+1],dp[i+1][j]);
+                if (c1[i] == c2[j]) {
+                    dp[i + 1][j + 1] = dp[i][j] + 1;
+                } else {
+                    dp[i + 1][j + 1] = Math.max(dp[i][j + 1], dp[i + 1][j]);
                 }
             }
         }
@@ -347,16 +348,17 @@ class Solution1143 {
     public int longestCommonSubsequence2(String text1, String text2) {
         char[] c1 = text1.toCharArray();
         char[] c2 = text2.toCharArray();
-        return dfs(c1,c2,c1.length-1,c2.length-1);
+        return dfs(c1, c2, c1.length - 1, c2.length - 1);
     }
-    public int dfs(char[] c1,char[] c2,int i,int j){
-        if(i < 0 || j < 0){
+
+    public int dfs(char[] c1, char[] c2, int i, int j) {
+        if (i < 0 || j < 0) {
             return 0;
         }
-        if(c1[i] != c2[j]){
-            return Math.max(dfs(c1,c2,i-1,j),dfs(c1,c2,i,j-1));
+        if (c1[i] != c2[j]) {
+            return Math.max(dfs(c1, c2, i - 1, j), dfs(c1, c2, i, j - 1));
         }
-        return dfs(c1,c2,i-1,j-1)+1;
+        return dfs(c1, c2, i - 1, j - 1) + 1;
     }
 }
 
@@ -369,9 +371,9 @@ class Solution72 {
         // "ros"
         var c1 = word1.toCharArray();
         var c2 = word2.toCharArray();
-        var len1  = c1.length;
+        var len1 = c1.length;
         var len2 = c2.length;
-        int[][] dp = new int[len1+1][len2+1];
+        int[][] dp = new int[len1 + 1][len2 + 1];
         for (int i = 0; i < len1; i++) {
             dp[i][0] = i;
         }
@@ -380,10 +382,10 @@ class Solution72 {
         }
         for (int i = 0; i < len1; i++) {
             for (int j = 0; j < len2; j++) {
-                if(c1[i] == c2[j]){
-                    dp[i+1][j+1] = dp[i][j];
-                }else{
-                    dp[i+1][j+1] = Math.min(dp[i][j],Math.min(dp[i][j+1],dp[i+1][j]))+1;
+                if (c1[i] == c2[j]) {
+                    dp[i + 1][j + 1] = dp[i][j];
+                } else {
+                    dp[i + 1][j + 1] = Math.min(dp[i][j], Math.min(dp[i][j + 1], dp[i + 1][j])) + 1;
                 }
             }
         }
@@ -397,14 +399,14 @@ class Solution72 {
  */
 class Solution300 {
     public int lengthOfLIS(int[] nums) {
-        int len = nums.length,ans = 1;
-        int[] dp = new int[len+1];
-        Arrays.fill(dp,1);
-        for (int i = 0; i <len; i++) {
+        int len = nums.length, ans = 1;
+        int[] dp = new int[len + 1];
+        Arrays.fill(dp, 1);
+        for (int i = 0; i < len; i++) {
             for (int j = 0; j < i; j++) {
-                if(nums[i] > nums[j]){
-                    dp[i] = Math.max(dp[i],dp[j]+1);
-                    ans = Math.max(ans,dp[i]);
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                    ans = Math.max(ans, dp[i]);
                 }
             }
         }
@@ -413,7 +415,7 @@ class Solution300 {
 
     //贪心？
     public int lengthOfLIS2(int[] nums) {
-        int len = nums.length,ans = 1;
+        int len = nums.length, ans = 1;
         return 0;
     }
 }
@@ -424,28 +426,29 @@ class Solution300 {
  */
 class Solution_162_852 {
     public int findPeakElement(int[] nums) {
-        int i = 0, j = nums.length-1;
-        while (i<=j){
-            int mid = (i+j)/2;
-            if(nums[mid] < nums[mid+1]){
-                i = mid+1;
-            }else{
-                j = mid-1;
+        int i = 0, j = nums.length - 1;
+        while (i <= j) {
+            int mid = (i + j) / 2;
+            if (nums[mid] < nums[mid + 1]) {
+                i = mid + 1;
+            } else {
+                j = mid - 1;
             }
         }
         return i;
     }
 
     int len;
+
     public int peakIndexInMountainArray(int[] arr) {
-        int i = 0,len = arr.length;
-        int j = len-1;
-        while (i<=j){
-            int mid = (i+j)/2;
-            if(arr[mid] < arr[mid+1]){
-                i = mid+1;
-            }else{
-                j = mid-1;
+        int i = 0, len = arr.length;
+        int j = len - 1;
+        while (i <= j) {
+            int mid = (i + j) / 2;
+            if (arr[mid] < arr[mid + 1]) {
+                i = mid + 1;
+            } else {
+                j = mid - 1;
             }
         }
         return i;
@@ -465,11 +468,11 @@ class Solution1671 {
     }
 }
 
-class ListNode{
+class ListNode {
     public int val;
     public ListNode next;
 
-    public ListNode(int val){
+    public ListNode(int val) {
         this.val = val;
     }
 }
@@ -481,62 +484,62 @@ class ListNode{
 class SolutionSimple {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ListNode dum = new ListNode(-1),d = dum;
+        ListNode dum = new ListNode(-1), d = dum;
         int[] t = new int[]{};
         while (scanner.hasNext("x"))
-        for (int i : t) {
-            ListNode listNode = new ListNode(i);
-            d.next = listNode;
-            d = listNode;
-        }
+            for (int i : t) {
+                ListNode listNode = new ListNode(i);
+                d.next = listNode;
+                d = listNode;
+            }
         ListNode mid = getMid(dum.next);
-        while (mid != null){
+        while (mid != null) {
             System.out.println(mid.val);
             mid = mid.next;
         }
     }
 
-    public static ListNode getMid(ListNode node){
+    public static ListNode getMid(ListNode node) {
         ListNode h = node;
         if (h == null) return null;
-        if(h.next == null) return h;
+        if (h.next == null) return h;
         ListNode monoHead = node.next;
-        while (h != null && h.next != null){
+        while (h != null && h.next != null) {
             ListNode next = h.next;
             h.next = h.next.next;
             h = next;
         }
         ListNode r = reverseNode(monoHead);
         ListNode l = node;
-        ListNode dummy = new ListNode(-1),now= dummy;
-        while(l != null && r != null){
-            int val = Math.min(l.val,r.val);
+        ListNode dummy = new ListNode(-1), now = dummy;
+        while (l != null && r != null) {
+            int val = Math.min(l.val, r.val);
             ListNode listNode = new ListNode(val);
             now.next = listNode;
             now = listNode;
             if (val == l.val) l = l.next;
-            else{
+            else {
                 r = r.next;
             }
         }
-        if(l != null){
+        if (l != null) {
             now.next = l;
         }
-        if(r != null){
+        if (r != null) {
             now.next = r;
         }
         return dummy.next;
     }
 
-    public  static ListNode reverseNode(ListNode node){
-        ListNode h = node,pre = null;
-        while  (h != null){
+    public static ListNode reverseNode(ListNode node) {
+        ListNode h = node, pre = null;
+        while (h != null) {
             ListNode next = h.next;
             h.next = pre;
             pre = h;
             h = next;
         }
-        return pre ;
+        return pre;
     }
 }
 
@@ -544,10 +547,10 @@ class SolutionSimple {
 /**
  * https://leetcode.cn/problems/best-team-with-no-conflicts/description/
  */
-class Solution1626{
+class Solution1626 {
     public static void main(String[] args) {
-        int[] scores = new int[]{5,5,5,5};
-        int[] ages = new int[]{1,1,2,2};
+        int[] scores = new int[]{5, 5, 5, 5};
+        int[] ages = new int[]{1, 1, 2, 2};
         int i = bestTeamScore(scores, ages);
         System.out.println(i);
     }
@@ -555,29 +558,48 @@ class Solution1626{
     public static int bestTeamScore(int[] scores, int[] ages) {
         int len = ages.length;
         int[][] players = new int[len][2];
-        for (int i = 0; i < len ; i++) {
+        for (int i = 0; i < len; i++) {
             players[i][0] = ages[i];
             players[i][1] = scores[i];
         }
-        Arrays.sort(players, (o1, o2)-> o1[0] != o2[0] ? o1[0]-o2[0] : o1[1]-o2[1]);
+        Arrays.sort(players, (o1, o2) -> o1[0] != o2[0] ? o1[0] - o2[0] : o1[1] - o2[1]);
         int ans = 0;
-        int[] dp = new int[len+1];
+        int[] dp = new int[len + 1];
         for (int i = 0; i < len; i++) {
             dp[i] = players[i][1];
         }
         for (int i = 0; i < len; i++) {
             int k = dp[i];
             for (int j = 0; j < i; j++) {
-                if(players[i][1] >= players[j][1]){
-                    dp[i] = Math.max(dp[i],k+dp[j]);
+                if (players[i][1] >= players[j][1]) {
+                    dp[i] = Math.max(dp[i], k + dp[j]);
                 }
             }
-            ans = Math.max(ans,dp[i]);
+            ans = Math.max(ans, dp[i]);
         }
         return ans;
     }
 }
 
+
+/*
+https://leetcode.cn/problems/coin-change-ii/description/?envType=daily-question&envId=Invalid%20Date
+ */
+class Solution518 {
+    public int change(int amount, int[] coins) {
+        int len = coins.length;
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int i = 0; i < len; i++) {
+            for (int j = 1; j <= amount; j++) {
+                if (j >= coins[i]) {
+                    dp[j] += dp[j - coins[i]];
+                }
+            }
+        }
+        return dp[amount];
+    }
+}
 
 /*
 https://leetcode.cn/problems/longest-increasing-subsequence-ii/
@@ -587,6 +609,55 @@ class Solution2407 {
         return 0;
     }
 }
+
+
+
+/*
+https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+ */
+class Solution309 {
+    public int maxProfit(int[] prices) {
+        int len = prices.length;
+        if (len == 1) return 0;
+        int[][]dp = new int[len+2][2];
+        dp[0][1] = -prices[0];
+        for(int i = 1; i < len; i++){
+            //当天不持有股票的最大利润-> 昨天持有股票再卖出去，或者昨天不持有股票
+            //当天持有股票的最大利润-> 昨天持有的，或者今天要买股票->只能从前天的未持有股票状态买今天的股票
+            dp[i+1][0] = Math.max(dp[i][0],dp[i][1]+prices[i]);
+            dp[i+1][1] = Math.max(dp[i][1],dp[i-1][0]-prices[i]);
+        }
+        return dp[len][0];
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/description/
+ */
+class Solution188 {
+    public int maxProfit(int k,int[] prices) {
+        int len = prices.length;
+        if (len == 1) return 0;
+        int[][][]dp = new int[len+2][k][2];
+        dp[0][1] = -prices[0];
+        for(int i = 1; i < len; i++){
+            for (int j = 0; j < k; j++) {
+                dp[i+1][j+1][0] = Math.max(dp[i][j+1][0],dp[i][j][1]+prices[i]);
+                dp[i+1][j+1][1] = Math.max(dp[i][j+1][1],dp[i][j][0]-prices[i]);
+            }
+            //当天不持有股票的最大利润-> 昨天持有股票再卖出去，或者昨天不持有股票
+            //当天持有股票的最大利润-> 昨天持有的，或者从昨天的未持有股票状态买今天的股票
+
+        }
+        return dp[len][0];
+    }
+
+
+}
+
+
+
 
 
 
