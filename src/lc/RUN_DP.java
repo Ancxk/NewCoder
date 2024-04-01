@@ -3,6 +3,7 @@ package lc;
 import pass_leecode.Solution;
 
 import java.awt.image.AreaAveragingScaleFilter;
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -611,7 +612,6 @@ class Solution2407 {
 }
 
 
-
 /*
 https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/
  */
@@ -619,43 +619,253 @@ class Solution309 {
     public int maxProfit(int[] prices) {
         int len = prices.length;
         if (len == 1) return 0;
-        int[][]dp = new int[len+2][2];
+        int[][] dp = new int[len + 2][2];
         dp[0][1] = -prices[0];
-        for(int i = 1; i < len; i++){
+        for (int i = 1; i < len; i++) {
             //当天不持有股票的最大利润-> 昨天持有股票再卖出去，或者昨天不持有股票
             //当天持有股票的最大利润-> 昨天持有的，或者今天要买股票->只能从前天的未持有股票状态买今天的股票
-            dp[i+1][0] = Math.max(dp[i][0],dp[i][1]+prices[i]);
-            dp[i+1][1] = Math.max(dp[i][1],dp[i-1][0]-prices[i]);
+            dp[i + 1][0] = Math.max(dp[i][0], dp[i][1] + prices[i]);
+            dp[i + 1][1] = Math.max(dp[i][1], dp[i - 1][0] - prices[i]);
         }
         return dp[len][0];
     }
+}
+
+class MySocket {
+    public static void main(String[] args) {
+        Socket socket = new Socket();
+
+    }
+
 }
 
 
 /*
 https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/description/
  */
+// TODO: 2024/4/1
 class Solution188 {
-    public int maxProfit(int k,int[] prices) {
-        int len = prices.length;
-        if (len == 1) return 0;
-        int[][][]dp = new int[len+2][k][2];
-        dp[0][1] = -prices[0];
-        for(int i = 1; i < len; i++){
-            for (int j = 0; j < k; j++) {
-                dp[i+1][j+1][0] = Math.max(dp[i][j+1][0],dp[i][j][1]+prices[i]);
-                dp[i+1][j+1][1] = Math.max(dp[i][j+1][1],dp[i][j][0]-prices[i]);
-            }
-            //当天不持有股票的最大利润-> 昨天持有股票再卖出去，或者昨天不持有股票
-            //当天持有股票的最大利润-> 昨天持有的，或者从昨天的未持有股票状态买今天的股票
+    public int maxProfit(int k, int[] prices) {
+        return 0;
+    }
+}
 
-        }
-        return dp[len][0];
+
+/*
+https://leetcode.cn/problems/implement-queue-using-stacks/
+ */
+
+/**
+ * Your MyQueue object will be   instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+
+class MyQueue {
+    private Stack<Integer> stack1 = null;
+    private Stack<Integer> stack2 = null;
+    public MyQueue() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
     }
 
+    public void push(int x) {
+        stack1.add(x);
+    }
+
+    public int pop() {
+        peek();
+        return stack2.pop();
+    }
+
+    public int peek() {
+        if(stack2.size() > 0){
+            return stack2.peek();
+        }else{
+            while (stack1.size() > 0){
+                stack2.add(stack1.pop());
+            }
+            return stack2.peek();
+        }
+
+    }
+
+    public boolean empty() {
+        return stack2.size() + stack1.size() == 0;
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/implement-stack-using-queues/
+ */
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+class MyStack {
+    private Deque<Integer> que1 = null;
+    private Deque<Integer> que2 = null;
+
+    public MyStack() {
+        que1 = new LinkedList<>();
+        que2 = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        que1.add(x);
+    }
+
+    public int pop() {
+        while (que1.size() > 1){
+            que2.add(que1.pop());
+        }
+        int k = que1.pop();
+        Deque<Integer> tmp = que2;
+        que2 = que1;
+        que1 = tmp;
+        return k;
+    }
+
+    public int top() {
+        int k = pop();
+        push(k);
+        return k;
+    }
+
+    public boolean empty() {
+        return que1.size() == 0;
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/longest-palindromic-subsequence/
+ */
+class Solution516 {
+    //dfs
+    int[][] memo = null;
+    public int longestPalindromeSubseq(String s) {
+        char[] c = s.toCharArray();
+
+        int len = c.length;
+        memo = new int[len][len];
+        for (int[] ints : memo) {
+            Arrays.fill(ints,-1);
+        }
+        return dfs(c,0,len-1);
+    }
+    public int dfs (char[] c,int i,int j){
+        if(i>j) return 0;
+        if(i == j) return 1;
+        if(memo[i][j] != -1) return memo[i][j];
+        if(c[i] == c[j]) return memo[i][j] = dfs(c,i+1,j-1)+2;
+        return memo[i][j] =  Math.max(dfs(c,i+1,j),dfs(c,i,j-1));
+    }
+
+    //翻译成递推
+        public int longestPalindromeSubseq2(String s) {
+            char[] c = s.toCharArray();
+            int len = c.length;
+            int[][] dp = new int[len][len];
+            for (int i = len - 1; i >= 0; i--) {
+                for (int j = i; j < dp.length; j++) {
+                    if (i == j) {
+                        dp[i][j] = 1;
+                        continue;
+                    }
+                    if (i + 1 < len && j - 1 >= 0) {
+                        if (c[i] == c[j])
+                            dp[i][j] = dp[i + 1][j - 1] + 2;
+                        else
+                            dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                    }
+
+                }
+            }
+            return dp[0][len - 1];
+
+       }
+}
+
+/*
+https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/
+ */
+class Solution1039 {
+    //正确dfs
+    int[][] memo = null;
+    public int minScoreTriangulation2(int[] values) {
+        int len = values.length;
+        memo = new int[len][len];
+        for (int[] ints : memo) {
+            Arrays.fill(ints, -1);
+        }
+        return dfs(values, 0, len - 1);
+    }
+    public int dfs(int[] v, int i, int j) {
+//        if(j-i == 2) return v[i]*v[i+1]*v[i+2];
+        if (j - i < 2) return 0;
+        if (memo[i][j] != -1) return memo[i][j];
+        int mi = Integer.MAX_VALUE;
+        for (int k = i + 1; k < j; k++) {
+            int s = dfs(v, i, k) + dfs(v, k, j) + v[i] * v[j] * v[k];
+            mi = Math.min(mi, s);
+        }
+        return memo[i][j] = mi;
+    }
+
+    //超时dfs
+    public int minScoreTriangulation(int[] values) {
+        return dfs(values);
+    }
+
+    public int dfs(int[] v) {
+        int l = v.length;
+        if (l < 3) return -1;
+        if (l == 3) {
+            return v[1] * v[0] * v[2];
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < l; i++) {
+            int r = v[i] * v[(i + 1) % l] * v[(i - 1) == -1 ? l - 1 : i - 1];
+            int[] ints = new int[l - 1];
+            for (int j = 0, p = 0; j < l; j++) {
+                if (j != i) ints[p++] = v[j];
+            }
+            int k = dfs(ints);
+            min = Math.min(min, k + r);
+        }
+        return min;
+    }
 
 }
 
+/*
+https://leetcode.cn/problems/maximize-palindrome-length-from-subsequences/description/
+ */
+class Solution1771 {
+    public int longestPalindrome(String word1, String word2) {
+        return 0;
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/minimum-cost-to-merge-stones/description/
+ */
+class Solution1000 {
+    public int mergeStones(int[] stones, int k) {
+        return 0;
+    }
+}
 
 
 
