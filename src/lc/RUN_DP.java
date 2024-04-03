@@ -774,25 +774,19 @@ class Solution516 {
     //翻译成递推
         public int longestPalindromeSubseq2(String s) {
             char[] c = s.toCharArray();
-            int len = c.length;
+            int len = s.length();
             int[][] dp = new int[len][len];
-            for (int i = len - 1; i >= 0; i--) {
-                for (int j = i; j < dp.length; j++) {
-                    if (i == j) {
-                        dp[i][j] = 1;
-                        continue;
+            dp[len-1][len-1] = 1;
+            for(int i = len-2;i >= 0; i--){
+                dp[i][i] = 1;
+                for(int j = i+1; j < len; j++){
+                    if(c[i] == c[j]) dp[i][j] = dp[i+1][j-1]+2;
+                    else{
+                        dp[i][j] = Math.max(dp[i+1][j],dp[i][j-1]);
                     }
-                    if (i + 1 < len && j - 1 >= 0) {
-                        if (c[i] == c[j])
-                            dp[i][j] = dp[i + 1][j - 1] + 2;
-                        else
-                            dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
-                    }
-
                 }
             }
-            return dp[0][len - 1];
-
+            return dp[0][len-1];
        }
 }
 
@@ -800,6 +794,24 @@ class Solution516 {
 https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/
  */
 class Solution1039 {
+    //dp
+    public int minScoreTriangulation3(int[] values) {
+        int len = values.length;
+        int[][] dp = new int[len+1][len+1];
+        for (int i = len-3; i >= 0; i--) {
+            for (int j = i+1; j < len; j++) {
+                if(j-i < 2) continue;
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i+1; k < j; k++) {
+                    int v = values[i]*values[j]*values[k];
+                    dp[i][j] = Math.min(dp[i][j],dp[i][k]+dp[k][j]+v);
+                }
+            }
+        }
+        return dp[0][len-1];
+    }
+
+
     //正确dfs
     int[][] memo = null;
     public int minScoreTriangulation2(int[] values) {
@@ -811,7 +823,6 @@ class Solution1039 {
         return dfs(values, 0, len - 1);
     }
     public int dfs(int[] v, int i, int j) {
-//        if(j-i == 2) return v[i]*v[i+1]*v[i+2];
         if (j - i < 2) return 0;
         if (memo[i][j] != -1) return memo[i][j];
         int mi = Integer.MAX_VALUE;
@@ -853,7 +864,26 @@ https://leetcode.cn/problems/maximize-palindrome-length-from-subsequences/descri
  */
 class Solution1771 {
     public int longestPalindrome(String word1, String word2) {
-        return 0;
+        String s = word1+word2;
+        char[] c = s.toCharArray();
+        int len = c.length;
+        int ans = 0;
+        int[][] dp = new int[len][len];
+        dp[len-1][len-1] = 1;
+        for(int i = len-2; i >= 0; i--){
+            dp[i][i] = 1;
+            for(int j = i+1; j < len; j++){
+                if(c[i] == c[j]){
+                    dp[i][j] = dp[i+1][j-1]+2;
+                    if(i < word1.length() && j >= word1.length()){
+                        ans = Math.max(ans,dp[i][j]);
+                    }
+                }else{
+                    dp[i][j] = Math.max(dp[i+1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return ans;
     }
 }
 
