@@ -48,7 +48,7 @@ public class SingleTest {
 
 
 class Single{
-    private  static Single single = null;
+    private volatile static  Single single = null;
     public static Single getSingle(){
         if (single == null){
             synchronized (Single.class){

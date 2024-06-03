@@ -1437,7 +1437,22 @@ public class H100 {
     }
 }
 
-class Solution1673 {
+class Solution1673 extends Object{
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Solution1673)) return false;
+        Solution1673 that = (Solution1673) o;
+        return Objects.equals(ans, that.ans) && Objects.equals(map, that.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ans, map);
+    }
+
     //todo 脑袋晕，单调栈，啥时候用，边界条件
     List<List<Integer>> ans = new ArrayList<>();
     public int[] mostCompetitive_v2(int[] nums, int k) {
@@ -1454,6 +1469,7 @@ class Solution1673 {
         }
         return st;
     }
+
 
 
     public int[] mostCompetitive(int[] nums, int k) {
@@ -1494,6 +1510,35 @@ class Solution1673 {
                 map.remove(nus);
             }
         }
+    }
+}
+
+
+
+/*
+https://leetcode.cn/problems/minimum-size-subarray-sum/
+ */
+class Solution209 {
+    public int minSubArrayLen(int target, int[] nums) {
+        final int MAX = Integer.MAX_VALUE/2;
+        int i=0,n = nums.length,j = 0,ans = MAX;
+        int sum = 0;
+        for(;j < n; j++){
+            sum+=nums[j];
+            while (sum >= target){
+                ans = Math.min(ans,j-i+1);
+                sum -= nums[i++];
+            }
+        }
+        return ans == MAX ? 0: ans;
+    }
+}
+
+/*
+https://leetcode.cn/problems/maximum-subarray/
+ */
+class Solution53 {
+    public int maxSubArray(int[] nums) {
 
     }
 }

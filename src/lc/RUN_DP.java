@@ -1,14 +1,7 @@
 package lc;
 
-import pass_leecode.Solution;
-
-import java.awt.image.AreaAveragingScaleFilter;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 /**
  * @author xwp
@@ -51,14 +44,13 @@ class Solution198 {
             f1 = new_f;
         }
         return f1;
-
-
     }
 
     //选与不选,使用memo数组存储重复计算的值
     public int dfs(int[] nums, int i) {
         if (i < 0) {
             return 0;
+
         }
         if (memo[i] != -1) {
             return memo[i];
@@ -473,11 +465,17 @@ class ListNode {
     public int val;
     public ListNode next;
 
-    ListNode() {}
+    ListNode() {
+    }
+
     public ListNode(int val) {
         this.val = val;
     }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
 }
 
 
@@ -669,6 +667,7 @@ https://leetcode.cn/problems/implement-queue-using-stacks/
 class MyQueue {
     private Stack<Integer> stack1 = null;
     private Stack<Integer> stack2 = null;
+
     public MyQueue() {
         stack1 = new Stack<>();
         stack2 = new Stack<>();
@@ -684,10 +683,10 @@ class MyQueue {
     }
 
     public int peek() {
-        if(stack2.size() > 0){
+        if (stack2.size() > 0) {
             return stack2.peek();
-        }else{
-            while (stack1.size() > 0){
+        } else {
+            while (stack1.size() > 0) {
                 stack2.add(stack1.pop());
             }
             return stack2.peek();
@@ -704,6 +703,7 @@ class MyQueue {
 /*
 https://leetcode.cn/problems/implement-stack-using-queues/
  */
+
 /**
  * Your MyStack object will be instantiated and called as such:
  * MyStack obj = new MyStack();
@@ -727,7 +727,7 @@ class MyStack {
     }
 
     public int pop() {
-        while (que1.size() > 1){
+        while (que1.size() > 1) {
             que2.add(que1.pop());
         }
         int k = que1.pop();
@@ -755,41 +755,43 @@ https://leetcode.cn/problems/longest-palindromic-subsequence/
 class Solution516 {
     //dfs
     int[][] memo = null;
+
     public int longestPalindromeSubseq(String s) {
         char[] c = s.toCharArray();
 
         int len = c.length;
         memo = new int[len][len];
         for (int[] ints : memo) {
-            Arrays.fill(ints,-1);
+            Arrays.fill(ints, -1);
         }
-        return dfs(c,0,len-1);
+        return dfs(c, 0, len - 1);
     }
-    public int dfs (char[] c,int i,int j){
-        if(i>j) return 0;
-        if(i == j) return 1;
-        if(memo[i][j] != -1) return memo[i][j];
-        if(c[i] == c[j]) return memo[i][j] = dfs(c,i+1,j-1)+2;
-        return memo[i][j] =  Math.max(dfs(c,i+1,j),dfs(c,i,j-1));
+
+    public int dfs(char[] c, int i, int j) {
+        if (i > j) return 0;
+        if (i == j) return 1;
+        if (memo[i][j] != -1) return memo[i][j];
+        if (c[i] == c[j]) return memo[i][j] = dfs(c, i + 1, j - 1) + 2;
+        return memo[i][j] = Math.max(dfs(c, i + 1, j), dfs(c, i, j - 1));
     }
 
     //翻译成递推
-        public int longestPalindromeSubseq2(String s) {
-            char[] c = s.toCharArray();
-            int len = s.length();
-            int[][] dp = new int[len][len];
-            dp[len-1][len-1] = 1;
-            for(int i = len-2;i >= 0; i--){
-                dp[i][i] = 1;
-                for(int j = i+1; j < len; j++){
-                    if(c[i] == c[j]) dp[i][j] = dp[i+1][j-1]+2;
-                    else{
-                        dp[i][j] = Math.max(dp[i+1][j],dp[i][j-1]);
-                    }
+    public int longestPalindromeSubseq2(String s) {
+        char[] c = s.toCharArray();
+        int len = s.length();
+        int[][] dp = new int[len][len];
+        dp[len - 1][len - 1] = 1;
+        for (int i = len - 2; i >= 0; i--) {
+            dp[i][i] = 1;
+            for (int j = i + 1; j < len; j++) {
+                if (c[i] == c[j]) dp[i][j] = dp[i + 1][j - 1] + 2;
+                else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
                 }
             }
-            return dp[0][len-1];
-       }
+        }
+        return dp[0][len - 1];
+    }
 }
 
 /*
@@ -799,23 +801,24 @@ class Solution1039 {
     //dp
     public int minScoreTriangulation3(int[] values) {
         int len = values.length;
-        int[][] dp = new int[len+1][len+1];
-        for (int i = len-3; i >= 0; i--) {
-            for (int j = i+1; j < len; j++) {
-                if(j-i < 2) continue;
+        int[][] dp = new int[len + 1][len + 1];
+        for (int i = len - 3; i >= 0; i--) {
+            for (int j = i + 1; j < len; j++) {
+                if (j - i < 2) continue;
                 dp[i][j] = Integer.MAX_VALUE;
-                for (int k = i+1; k < j; k++) {
-                    int v = values[i]*values[j]*values[k];
-                    dp[i][j] = Math.min(dp[i][j],dp[i][k]+dp[k][j]+v);
+                for (int k = i + 1; k < j; k++) {
+                    int v = values[i] * values[j] * values[k];
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j] + v);
                 }
             }
         }
-        return dp[0][len-1];
+        return dp[0][len - 1];
     }
 
 
     //正确dfs
     int[][] memo = null;
+
     public int minScoreTriangulation2(int[] values) {
         int len = values.length;
         memo = new int[len][len];
@@ -824,6 +827,7 @@ class Solution1039 {
         }
         return dfs(values, 0, len - 1);
     }
+
     public int dfs(int[] v, int i, int j) {
         if (j - i < 2) return 0;
         if (memo[i][j] != -1) return memo[i][j];
@@ -866,22 +870,22 @@ https://leetcode.cn/problems/maximize-palindrome-length-from-subsequences/descri
  */
 class Solution1771 {
     public int longestPalindrome(String word1, String word2) {
-        String s = word1+word2;
+        String s = word1 + word2;
         char[] c = s.toCharArray();
         int len = c.length;
         int ans = 0;
         int[][] dp = new int[len][len];
-        dp[len-1][len-1] = 1;
-        for(int i = len-2; i >= 0; i--){
+        dp[len - 1][len - 1] = 1;
+        for (int i = len - 2; i >= 0; i--) {
             dp[i][i] = 1;
-            for(int j = i+1; j < len; j++){
-                if(c[i] == c[j]){
-                    dp[i][j] = dp[i+1][j-1]+2;
-                    if(i < word1.length() && j >= word1.length()){
-                        ans = Math.max(ans,dp[i][j]);
+            for (int j = i + 1; j < len; j++) {
+                if (c[i] == c[j]) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                    if (i < word1.length() && j >= word1.length()) {
+                        ans = Math.max(ans, dp[i][j]);
                     }
-                }else{
-                    dp[i][j] = Math.max(dp[i+1][j],dp[i][j-1]);
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
                 }
             }
         }
@@ -895,13 +899,370 @@ https://leetcode.cn/problems/minimum-cost-to-merge-stones/description/
  */
 class Solution1000 {
     public int mergeStones(int[] stones, int k) {
-
         return 0;
+    }
+}
+
+/*
+方案数鼻祖-爬楼梯
+https://leetcode.cn/problems/climbing-stairs/
+ */
+class Solution70 {
+    public int climbStairs(int n) {
+        int[] dp = new int[n + 1];
+        if (n == 1) return 1;
+        dp[0] = 1;
+        dp[1] = 2;
+        for (int i = 0; i < n; i++) {
+            dp[i + 2] = dp[i + 1] + dp[i];
+        }
+        return dp[n];
+    }
+}
+
+/*
+https://leetcode.cn/problems/min-cost-climbing-stairs/
+ */
+class Solution746 {
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 0;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+        }
+        return dp[n];
+    }
+}
+
+/*
+组合总和4,
+爬楼梯变种，只不过每次可以爬n次，n从数组中取！,也相当于零钱兑换！
+https://leetcode.cn/problems/combination-sum-iv/description/
+ */
+class Solution377 {
+    public int combinationSum4(int[] nums, int tar) {
+        int[] dp = new int[tar + 1];
+        final int MOD = 1_000_000_007;
+        dp[0] = 1;
+        for (int i = 1; i <= tar; i++) {
+            for (int num : nums) {
+                if (i - num >= 0) dp[i] += dp[i - num];
+            }
+        }
+        return dp[tar];
+    }
+}
+
+/*
+https://leetcode.cn/problems/count-ways-to-build-good-strings/
+爬楼梯变种！
+ */
+class Solution2466 {
+    public int countGoodStrings(int low, int high, int zero, int one) {
+        int[] dp = new int[high + 1];
+        dp[0] = 1;
+        int res = 0;
+        final int MOD = 1_000_000_007;
+        for (int i = 1; i <= high; i++) {
+            int a = i - zero < 0 ? 0 : dp[i - zero];
+            dp[i] = (a + dp[i]) % MOD;
+            int b = i - one < 0 ? 0 : dp[i - one];
+            dp[i] = (b + dp[i]) % MOD;
+            if (i >= low) {
+                res = (res + dp[i]) % MOD;
+            }
+        }
+        return res;
+    }
+}
+
+/*
+01背包
+背包问题，选与不选，for外层枚举物品，内层枚举空间，与爬楼梯不是一个类型的。
+ */
+class Solution494_2 {
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        int k = target+sum;
+        if(k < 0 || k%2 == 1) return 0;
+        k /= 2;
+        //背包大小为k，枚举物品
+        int n = nums.length;
+        int[][] f = new int[n+1][k+1];
+        f[0][0] = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= k; j++) {
+                if(nums[i] > j) f[i+1][j] = f[i][j];
+                else  f[i+1][j] = f[i][j-nums[i]] + f[i][j];
+            }
+        }
+        return f[n][k];
+
+    }
+}
+
+
+/*完全背包
+https://leetcode.cn/problems/coin-change/
+ */
+class Solution322_2 {
+    static final int MAX = Integer.MAX_VALUE/2;
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] dp = new int[n+1][amount+1];
+        for (int[] ints : dp) {
+            Arrays.fill(ints,MAX);
+        }
+        dp[0][0] = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j <= amount; j++){
+                if(j-coins[i] < 0){
+                    dp[i+1][j] = dp[i][j];
+                }else{
+                    dp[i+1][j] = Math.min(dp[i][j],dp[i+1][j-coins[i]]+1) ;
+                }
+            }
+        }
+        return dp[n][amount] == MAX ? -1 : dp[n][amount];
     }
 }
 
 
 
+class Solution494_3 {
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for(int i : nums){
+            sum +=i;
+        }
+        int n = nums.length;
+        int x = sum+target;
+        if(x < 0 || x%2 == 1) return 0;
+        x /= 2;
+        int[][]dp = new int[n+1][x+1];
+        dp[0][0] = 1;
+        //dp[i][j]的含义就是从前i个物品中，凑齐j的方法个数
+        for (int i = 0; i < n; i++) {
+            for (int j = x; j >= 0; j--) {
+                if(j < nums[i]){
+                    dp[i+1][j] = dp[i][j];
+                }else{
+                    dp[i+1][j] = dp[i][j]+dp[i][j-nums[i]];
+                }
+            }
+        }
+
+        int[] f = new int[x+1];
+        for (int i = 0; i < n; i++) {
+            for (int j = x; j >= 0; j--) {
+                f[j] += f[j-nums[i]];
+            }
+        }
+        //return f[x];
+        return dp[n][x];
+    }
+
+    public int dfs(int[] nums, int i, int c){
+        if(i < 0) return 0;
+        if(i == 0) return 1;
+        if(c < nums[i]) return dfs(nums,i-1,c);
+        return dfs(nums,i-1,c)+dfs(nums,i,c-nums[i]);
+    }
+}
+
+class Solution322_3 {
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] f = new int[n + 1][amount+1];
+        for (int i = 0; i <= n; i++) {
+            Arrays.fill(f[i],Integer.MAX_VALUE/2);
+        }
+        //f[i][j]表示以i结尾的数组，剩余背包为i的使用硬币最小个数。
+        f[0][0] = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if(coins[i] > j){
+                    f[i+1][j] = f[i][j];
+                }else{
+                    f[i+1][j] = Math.min(f[i+1][j-coins[i]]+1,f[i][j]);
+                }
+            }
+        }
+        int i = f[n][amount];
+        return i == Integer.MAX_VALUE/2 ? -1 : i;
+    }
+    public int coinChange2(int[] coins, int amount) {
+        int[] ff = new int[amount+1];
+        Arrays.fill(ff,Integer.MAX_VALUE);
+        ff[0] = 0;
+        for (int coin : coins) {
+            for (int j = 0; j <= amount; j++) {
+                if (coin <= j) {
+                    ff[j] = Math.min(ff[j - coin] + 1, ff[j]);
+                }
+            }
+        }
+        return ff[amount] == Integer.MAX_VALUE ? -1:ff[amount];
+    }
+}
 
 
 
+/*
+https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/
+ 零钱兑换翻版，一个物品只能选一次，并且返回最大物品个数。
+ */
+class Solution2915_2 {
+    public int lengthOfLongestSubsequence(List<Integer> nums, int tar) {
+        int n = nums.size();
+        int[][] f = new int[n + 1][tar + 1];
+        for (int[] ints : f) {
+            Arrays.fill(ints,Integer.MIN_VALUE);
+        }
+        f[0][0] = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= tar; j++) {
+                if(j-nums.get(i) >= 0){
+                    f[i+1][j] = Math.max(f[i][j],f[i][j-nums.get(i)]+1);
+                }else{
+                    f[i+1][j] = f[i][j];
+                }
+            }
+        }
+        int x = f[n][tar];
+        return x < 0 ? -1 : x;
+    }
+    //滚动数组
+    public int lengthOfLongestSubsequence2(List<Integer> nums, int tar) {
+        int[] f = new int[tar + 1];
+        Arrays.fill(f,Integer.MIN_VALUE);
+        f[0] = 0;
+        for (Integer num : nums) {
+            for (int j = tar; j >= 0; j--) {
+                if (j - num >= 0) {
+                    f[j] = Math.max(f[j], f[j - num] + 1);
+                }
+            }
+        }
+        int x = f[tar];
+        return x < 0 ? -1 : x;
+    }
+}
+
+
+/*
+https://leetcode.cn/problems/partition-equal-subset-sum/
+ */
+class Solution416 {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for(int i : nums){
+            sum +=i;
+        }
+        if(sum%2== 1) return false;
+        sum /=2;
+        var n = nums.length;
+        int[][] f = new int[n + 1][sum + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if(j-nums[i] >= 0 && f[i][j-nums[i]]+nums[i] == j){
+                    f[i+1][j] = j;
+                }else{
+                    f[i+1][j] = f[i][j];
+                }
+            }
+        }
+        return f[n][sum] == sum;
+    }
+    //滚动数组
+    public boolean canPartition2(int[] nums) {
+        int sum = 0;
+        for(int i : nums){
+            sum +=i;
+        }
+        if(sum%2== 1) return false;
+        sum /=2;
+        var n = nums.length;
+        int[] f = new int[sum + 1];
+        for (int num : nums) {
+            for (int j = sum; j >= 0; j--) {
+                if (j - num >= 0 && f[j - num] + num == j) {
+                    f[j] = j;
+                }
+            }
+        }
+        return f[sum] == sum;
+    }
+
+}
+
+
+
+/*
+https://leetcode.cn/problems/coin-change-ii/
+零钱兑换2，递归没懂。。。拆分子问题不懂为啥这么拆
+ */
+class Solution518_2 {
+    public int change(int amount, int[] coins) {
+        int n = coins.length;
+        int[][] f = new int[n + 1][amount + 1];
+        f[0][0] = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if(j-coins[i] >= 0){
+                    f[i+1][j] = f[i+1][j-coins[i]]+f[i][j];
+                }else{
+                    f[i+1][j] = f[i][j];
+                }
+            }
+        }
+        return f[n][amount];
+    }
+
+    public int dfs(int[] nums,int i ,int c){
+        if(i < 0){
+            return c == 0 ? 1 : 0;
+        }
+        if(c-nums[i] < 0) return dfs(nums,i-1,c);
+        return dfs(nums,i-1,c)+dfs(nums,i,c-nums[i]);
+    }
+}
+
+/*
+https://leetcode.cn/problems/longest-common-subsequence/
+ */
+
+class Solution1143_2 {
+    int[][] memo;
+    public int longestCommonSubsequence(String text1, String text2) {
+        int a = text1.length(),b =text2.length();
+        memo = new int[a][b];
+        for (int[] ints : memo) {
+            Arrays.fill(ints,-1);
+        }
+        return dfs(text1,text2,text1.length()-1,text2.length()-1);
+
+    }
+    public int dfs(String t1,String t2,int i,int j){
+        if(i<0 || j < 0) return 0;
+        if(memo[i][j] != -1)return memo[i][j];
+        if(t1.charAt(i) == t2.charAt(j)) return memo[i][j] = dfs(t1,t2,i-1,j-1)+1;
+        return memo[i][j] = Math.max(dfs(t1,t2,i-1,j),dfs(t1,t2,i,j-1)) ;
+    }
+}
+
+class Solution72_2 {
+    public int minDistance(String word1, String word2) {
+
+    }
+    public int dfs(String w1,String w2,int i,int j){
+
+
+
+    }
+}
