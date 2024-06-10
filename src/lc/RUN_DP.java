@@ -988,17 +988,17 @@ class Solution494_2 {
         for (int num : nums) {
             sum += num;
         }
-        int k = target+sum;
-        if(k < 0 || k%2 == 1) return 0;
+        int k = target + sum;
+        if (k < 0 || k % 2 == 1) return 0;
         k /= 2;
         //背包大小为k，枚举物品
         int n = nums.length;
-        int[][] f = new int[n+1][k+1];
+        int[][] f = new int[n + 1][k + 1];
         f[0][0] = 1;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= k; j++) {
-                if(nums[i] > j) f[i+1][j] = f[i][j];
-                else  f[i+1][j] = f[i][j-nums[i]] + f[i][j];
+                if (nums[i] > j) f[i + 1][j] = f[i][j];
+                else f[i + 1][j] = f[i][j - nums[i]] + f[i][j];
             }
         }
         return f[n][k];
@@ -1011,20 +1011,21 @@ class Solution494_2 {
 https://leetcode.cn/problems/coin-change/
  */
 class Solution322_2 {
-    static final int MAX = Integer.MAX_VALUE/2;
+    static final int MAX = Integer.MAX_VALUE / 2;
+
     public int coinChange(int[] coins, int amount) {
         int n = coins.length;
-        int[][] dp = new int[n+1][amount+1];
+        int[][] dp = new int[n + 1][amount + 1];
         for (int[] ints : dp) {
-            Arrays.fill(ints,MAX);
+            Arrays.fill(ints, MAX);
         }
         dp[0][0] = 0;
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j <= amount; j++){
-                if(j-coins[i] < 0){
-                    dp[i+1][j] = dp[i][j];
-                }else{
-                    dp[i+1][j] = Math.min(dp[i][j],dp[i+1][j-coins[i]]+1) ;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if (j - coins[i] < 0) {
+                    dp[i + 1][j] = dp[i][j];
+                } else {
+                    dp[i + 1][j] = Math.min(dp[i][j], dp[i + 1][j - coins[i]] + 1);
                 }
             }
         }
@@ -1033,72 +1034,72 @@ class Solution322_2 {
 }
 
 
-
 class Solution494_3 {
     public int findTargetSumWays(int[] nums, int target) {
         int sum = 0;
-        for(int i : nums){
-            sum +=i;
+        for (int i : nums) {
+            sum += i;
         }
         int n = nums.length;
-        int x = sum+target;
-        if(x < 0 || x%2 == 1) return 0;
+        int x = sum + target;
+        if (x < 0 || x % 2 == 1) return 0;
         x /= 2;
-        int[][]dp = new int[n+1][x+1];
+        int[][] dp = new int[n + 1][x + 1];
         dp[0][0] = 1;
         //dp[i][j]的含义就是从前i个物品中，凑齐j的方法个数
         for (int i = 0; i < n; i++) {
             for (int j = x; j >= 0; j--) {
-                if(j < nums[i]){
-                    dp[i+1][j] = dp[i][j];
-                }else{
-                    dp[i+1][j] = dp[i][j]+dp[i][j-nums[i]];
+                if (j < nums[i]) {
+                    dp[i + 1][j] = dp[i][j];
+                } else {
+                    dp[i + 1][j] = dp[i][j] + dp[i][j - nums[i]];
                 }
             }
         }
 
-        int[] f = new int[x+1];
+        int[] f = new int[x + 1];
         for (int i = 0; i < n; i++) {
             for (int j = x; j >= 0; j--) {
-                f[j] += f[j-nums[i]];
+                f[j] += f[j - nums[i]];
             }
         }
         //return f[x];
         return dp[n][x];
     }
 
-    public int dfs(int[] nums, int i, int c){
-        if(i < 0) return 0;
-        if(i == 0) return 1;
-        if(c < nums[i]) return dfs(nums,i-1,c);
-        return dfs(nums,i-1,c)+dfs(nums,i,c-nums[i]);
+    public int dfs(int[] nums, int i, int c) {
+        if (i < 0) return 0;
+        if (i == 0) return 1;
+        if (c < nums[i]) return dfs(nums, i - 1, c);
+        return dfs(nums, i - 1, c) + dfs(nums, i, c - nums[i]);
     }
 }
 
 class Solution322_3 {
     public int coinChange(int[] coins, int amount) {
         int n = coins.length;
-        int[][] f = new int[n + 1][amount+1];
+        int[][] f = new int[n + 1][amount + 1];
         for (int i = 0; i <= n; i++) {
-            Arrays.fill(f[i],Integer.MAX_VALUE/2);
+            Arrays.fill(f[i], Integer.MAX_VALUE / 2);
         }
         //f[i][j]表示以i结尾的数组，剩余背包为i的使用硬币最小个数。
         f[0][0] = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= amount; j++) {
-                if(coins[i] > j){
-                    f[i+1][j] = f[i][j];
-                }else{
-                    f[i+1][j] = Math.min(f[i+1][j-coins[i]]+1,f[i][j]);
+                if (coins[i] > j) {
+                    f[i + 1][j] = f[i][j];
+                } else {
+                    f[i + 1][j] = Math.min(f[i + 1][j - coins[i]] + 1, f[i][j]);
                 }
             }
         }
         int i = f[n][amount];
-        return i == Integer.MAX_VALUE/2 ? -1 : i;
+        return i == Integer.MAX_VALUE / 2 ? -1 : i;
     }
+
     public int coinChange2(int[] coins, int amount) {
-        int[] ff = new int[amount+1];
-        Arrays.fill(ff,Integer.MAX_VALUE);
+        int[] ff = new int[amount + 1];
+        Arrays.fill(ff, Integer.MAX_VALUE);
         ff[0] = 0;
         for (int coin : coins) {
             for (int j = 0; j <= amount; j++) {
@@ -1107,10 +1108,9 @@ class Solution322_3 {
                 }
             }
         }
-        return ff[amount] == Integer.MAX_VALUE ? -1:ff[amount];
+        return ff[amount] == Integer.MAX_VALUE ? -1 : ff[amount];
     }
 }
-
 
 
 /*
@@ -1122,25 +1122,26 @@ class Solution2915_2 {
         int n = nums.size();
         int[][] f = new int[n + 1][tar + 1];
         for (int[] ints : f) {
-            Arrays.fill(ints,Integer.MIN_VALUE);
+            Arrays.fill(ints, Integer.MIN_VALUE);
         }
         f[0][0] = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= tar; j++) {
-                if(j-nums.get(i) >= 0){
-                    f[i+1][j] = Math.max(f[i][j],f[i][j-nums.get(i)]+1);
-                }else{
-                    f[i+1][j] = f[i][j];
+                if (j - nums.get(i) >= 0) {
+                    f[i + 1][j] = Math.max(f[i][j], f[i][j - nums.get(i)] + 1);
+                } else {
+                    f[i + 1][j] = f[i][j];
                 }
             }
         }
         int x = f[n][tar];
         return x < 0 ? -1 : x;
     }
+
     //滚动数组
     public int lengthOfLongestSubsequence2(List<Integer> nums, int tar) {
         int[] f = new int[tar + 1];
-        Arrays.fill(f,Integer.MIN_VALUE);
+        Arrays.fill(f, Integer.MIN_VALUE);
         f[0] = 0;
         for (Integer num : nums) {
             for (int j = tar; j >= 0; j--) {
@@ -1161,32 +1162,33 @@ https://leetcode.cn/problems/partition-equal-subset-sum/
 class Solution416 {
     public boolean canPartition(int[] nums) {
         int sum = 0;
-        for(int i : nums){
-            sum +=i;
+        for (int i : nums) {
+            sum += i;
         }
-        if(sum%2== 1) return false;
-        sum /=2;
+        if (sum % 2 == 1) return false;
+        sum /= 2;
         var n = nums.length;
         int[][] f = new int[n + 1][sum + 1];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= sum; j++) {
-                if(j-nums[i] >= 0 && f[i][j-nums[i]]+nums[i] == j){
-                    f[i+1][j] = j;
-                }else{
-                    f[i+1][j] = f[i][j];
+                if (j - nums[i] >= 0 && f[i][j - nums[i]] + nums[i] == j) {
+                    f[i + 1][j] = j;
+                } else {
+                    f[i + 1][j] = f[i][j];
                 }
             }
         }
         return f[n][sum] == sum;
     }
+
     //滚动数组
     public boolean canPartition2(int[] nums) {
         int sum = 0;
-        for(int i : nums){
-            sum +=i;
+        for (int i : nums) {
+            sum += i;
         }
-        if(sum%2== 1) return false;
-        sum /=2;
+        if (sum % 2 == 1) return false;
+        sum /= 2;
         var n = nums.length;
         int[] f = new int[sum + 1];
         for (int num : nums) {
@@ -1202,7 +1204,6 @@ class Solution416 {
 }
 
 
-
 /*
 https://leetcode.cn/problems/coin-change-ii/
 零钱兑换2，递归没懂。。。拆分子问题不懂为啥这么拆
@@ -1214,22 +1215,22 @@ class Solution518_2 {
         f[0][0] = 1;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= amount; j++) {
-                if(j-coins[i] >= 0){
-                    f[i+1][j] = f[i+1][j-coins[i]]+f[i][j];
-                }else{
-                    f[i+1][j] = f[i][j];
+                if (j - coins[i] >= 0) {
+                    f[i + 1][j] = f[i + 1][j - coins[i]] + f[i][j];
+                } else {
+                    f[i + 1][j] = f[i][j];
                 }
             }
         }
         return f[n][amount];
     }
 
-    public int dfs(int[] nums,int i ,int c){
-        if(i < 0){
+    public int dfs(int[] nums, int i, int c) {
+        if (i < 0) {
             return c == 0 ? 1 : 0;
         }
-        if(c-nums[i] < 0) return dfs(nums,i-1,c);
-        return dfs(nums,i-1,c)+dfs(nums,i,c-nums[i]);
+        if (c - nums[i] < 0) return dfs(nums, i - 1, c);
+        return dfs(nums, i - 1, c) + dfs(nums, i, c - nums[i]);
     }
 }
 
@@ -1239,30 +1240,170 @@ https://leetcode.cn/problems/longest-common-subsequence/
 
 class Solution1143_2 {
     int[][] memo;
+
     public int longestCommonSubsequence(String text1, String text2) {
-        int a = text1.length(),b =text2.length();
+        int a = text1.length(), b = text2.length();
         memo = new int[a][b];
         for (int[] ints : memo) {
-            Arrays.fill(ints,-1);
+            Arrays.fill(ints, -1);
         }
-        return dfs(text1,text2,text1.length()-1,text2.length()-1);
+        return dfs(text1, text2, text1.length() - 1, text2.length() - 1);
 
     }
-    public int dfs(String t1,String t2,int i,int j){
-        if(i<0 || j < 0) return 0;
-        if(memo[i][j] != -1)return memo[i][j];
-        if(t1.charAt(i) == t2.charAt(j)) return memo[i][j] = dfs(t1,t2,i-1,j-1)+1;
-        return memo[i][j] = Math.max(dfs(t1,t2,i-1,j),dfs(t1,t2,i,j-1)) ;
+
+    public int dfs(String t1, String t2, int i, int j) {
+        if (i < 0 || j < 0) return 0;
+        if (memo[i][j] != -1) return memo[i][j];
+        if (t1.charAt(i) == t2.charAt(j)) return memo[i][j] = dfs(t1, t2, i - 1, j - 1) + 1;
+        return memo[i][j] = Math.max(dfs(t1, t2, i - 1, j), dfs(t1, t2, i, j - 1));
     }
 }
 
-class Solution72_2 {
-    public int minDistance(String word1, String word2) {
+/*
+完全背包，最小个数
+ */
+class Solution322_4 {
+    int M = Integer.MAX_VALUE / 2;
+
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] f = new int[n + 1][amount + 1];
+        int k = dfs(coins, n - 1, amount);
+        return k == M ? -1 : k;
 
     }
-    public int dfs(String w1,String w2,int i,int j){
 
+    public int coinChange3(int[] coins, int amount) {
+        int n = coins.length;
+        int[] f = new int[amount + 1];
+        Arrays.fill(f, Integer.MAX_VALUE / 2);
+        f[0] = 0;
+        for (int coin : coins) {
+            for (int j = 0; j <= amount; j++) {
+                if (coin <= j) {
+                    f[j] = Math.min(f[j - coin] + 1, f[j]);
+                }
+            }
+        }
+        return f[amount] == Integer.MAX_VALUE / 2 ? -1 : f[amount];
 
+    }
+
+    public int coinChange2(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] f = new int[n + 1][amount + 1];
+        for (int[] ints : f) {
+            Arrays.fill(ints, Integer.MAX_VALUE / 2);
+        }
+        f[0][0] = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if (coins[i] > j) {
+                    f[i + 1][j] = f[i][j];
+                } else {
+                    f[i + 1][j] = Math.min(f[i + 1][j - coins[i]] + 1, f[i][j]);
+                }
+            }
+        }
+        return f[n][amount] == Integer.MAX_VALUE / 2 ? -1 : f[n][amount];
+    }
+
+    public int dfs(int[] coin, int i, int c) {
+        if (i < 0) {
+            return c == 0 ? 0 : M;
+        }
+        if (coin[i] > c) return dfs(coin, i - 1, c);
+        int d = Math.min(dfs(coin, i - 1, c), dfs(coin, i, c - coin[i]) + 1);
+        return d;
+    }
+}
+
+/*
+组合问题
+ */
+class Solution416_2 {
+    int[][] memo;
+    public boolean canPartition(int[] nums) {
+        int n = nums.length, sum = 0;
+        for (int i : nums) {
+            sum += i;
+        }
+        if (sum % 2 == 1) return false;
+        sum /= 2;
+        memo = new int[n][sum + 1];
+        for (int[] ints : memo) {
+            Arrays.fill(ints, -1);
+        }
+        return dfs(nums, n - 1, sum);
+    }
+
+    public boolean dfs(int[] n, int i, int c) {
+        if (i < 0) return c == 0;
+        if (memo[i][c] != -1) return memo[i][c] == 1;
+        boolean k = dfs(n, i - 1, c) || c >= n[i] && dfs(n, i - 1, c - n[i]);
+        memo[i][c] = k ? 1 : 0;
+        return k;
+    }
+}
+
+/*
+完全背包，组合数问题
+
+ */
+class Solution518_3 {
+    public int change(int amount, int[] coins) {
+        int n = coins.length;
+        int[][] f = new int[n+1][amount+1];
+        for (int i = 0; i <= n; i++) {
+            f[i][0] = 1;
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                if(j>=coins[i]) f[i+1][j] = f[i+1][j-coins[i]]+f[i][j];
+                else f[i+1][j] = f[i][j];
+            }
+        }
+        return f[n][amount];
+    }
+    public int change2(int amount, int[] coins) {
+        int n = coins.length;
+        int[] f = new int[amount+1];
+        f[0] = 1;
+        for (int coin : coins) {
+            for (int j = 0; j <= amount; j++) {
+                if (j >= coin) f[j] += f[j - coin];
+            }
+        }
+        return f[amount];
+    }
+}
+
+/*
+子序列问题
+ */
+class Solution72_2 {
+    public int minDistance(String word1, String word2) {
+        int a = word1.length(),b= word2.length();
+        int[][] f= new int[a+1][b+1];
+        for (int i = 0; i <= a; i++) {
+            f[i][0] = i+1;
+        }
+
+    return 0;
+    }
+
+    public int dfs(String w1, String w2, int i, int j) {
+        if(i < 0) return j;
+        if(j < 0) return i;
+        char a = w1.charAt(i);
+        char b= w2.charAt(j);
+         dfs(w1,w2,i-1,j-1);
+
+        int k = dfs(w1,w2,i-1,j-1);
+        if(a == b) return k;
+        var p = dfs(w1,w2,i,j-1);
+        var q = dfs(w1,w2,i-1,j);
+        return Math.min(q,p);
 
     }
 }
