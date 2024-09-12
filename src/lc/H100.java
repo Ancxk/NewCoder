@@ -1535,10 +1535,17 @@ class Solution209 {
 }
 
 /*
+最大子数字和
 https://leetcode.cn/problems/maximum-subarray/
  */
 class Solution53 {
     public int maxSubArray(int[] nums) {
-
+        int n = nums.length,ans = Integer.MIN_VALUE;
+        int[] f = new int[n+1];
+        for (int i = 0; i < n; i++) {
+            f[i+1] = Math.max(f[i]+nums[i],nums[i]);
+            ans  = Math.max(ans,f[i+1]);
+        }
+        return ans;
     }
 }
